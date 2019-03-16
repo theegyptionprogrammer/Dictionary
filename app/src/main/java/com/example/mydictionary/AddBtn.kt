@@ -27,7 +27,7 @@ class AddBtn : AppCompatActivity() {
             val word = Word(String(), String())
             word.EnWord = ETEnglish.text.toString()
             word.RuWord = ETRussian.text.toString()
-            helper.insertword(word)
+            helper.insertword(this, word)
             clearET()
             ETEnglish.requestFocus()
             ETRussian.requestFocus()

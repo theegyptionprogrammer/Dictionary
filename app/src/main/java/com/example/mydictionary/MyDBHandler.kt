@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.widget.Toast
 
 class MyDBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
@@ -21,38 +22,43 @@ class MyDBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, n
 
     val dbhelper: MyDBHandler? = null
     val word = Word(String(), String())
-    val myword = ArrayList<Word>()
 
-    fun insertword(word: Word) {
-        val db = dbhelper?.readableDatabase
+    fun insertword(myctx: Context, word: Word) {
         val values = ContentValues()
 
         values.put(MyDBHandler.ColumnEnWord, word.EnWord)
         values.put(MyDBHandler.ColumnRuWord, word.RuWord)
-        db?.insert(TableWord, null, values)
-        db?.close()
+        val db = this.writableDatabase
+        try {
+            db.insert(TableWord, null, values)
+            Toast.makeText(myctx, "word have been inserted", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(myctx, e.message, Toast.LENGTH_SHORT).show()
+        }
+
+        db.close()
     }
 
     fun searchword() {
 
     }
 
-    fun getallwords(): ArrayList<Word> {
+    fun getallwords(mctx: Context): ArrayList<Word> {
         val selectquery = "select * From $TableWord"
         val db = this.readableDatabase
         val cursor = db.rawQuery(selectquery, null)
-        var context: Context? = null
-        var list: ArrayList<Word> = ArrayList()
+        var words = ArrayList<Word>()
 
         while (cursor.moveToNext()) {
+
             word.EnWord = cursor.getString(cursor.getColumnIndex(ColumnEnWord))
             word.RuWord = cursor.getString(cursor.getColumnIndex(ColumnRuWord))
-            list.add(word)
+            words.add(word)
         }
 
         cursor.close()
         db.close()
-        return list
+        return words
 
     }
 
