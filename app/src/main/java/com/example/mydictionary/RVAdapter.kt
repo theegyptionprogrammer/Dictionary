@@ -12,6 +12,11 @@ class RVAdapter(mctx: Context, var ListWords: MutableList<Word>) : RecyclerView.
 
     val mctx = mctx
 
+    fun additems(items: MutableList<Word>) {
+        this.ListWords.addAll(items)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder =
         ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.word, parent, false))
 

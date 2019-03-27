@@ -20,7 +20,6 @@ class MyDBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, n
         onCreate(db)
     }
 
-    val dbhelper: MyDBHandler? = null
     val word = Word(String(), String())
 
     fun insertword(myctx: Context, word: Word) {
@@ -43,14 +42,14 @@ class MyDBHandler(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, n
 
     }
 
-    fun getallwords(mctx: Context): ArrayList<Word> {
+    val mylist: MutableList<Word>
+        get() {
         val selectquery = "select * From $TableWord"
         val db = this.readableDatabase
         val cursor = db.rawQuery(selectquery, null)
         var words = ArrayList<Word>()
 
         while (cursor.moveToNext()) {
-
             word.EnWord = cursor.getString(cursor.getColumnIndex(ColumnEnWord))
             word.RuWord = cursor.getString(cursor.getColumnIndex(ColumnRuWord))
             words.add(word)
